@@ -1,0 +1,49 @@
+---
+title: "Practical Machine Learning 2014"
+author: "Costas Voglis"
+date: "Friday, December 05, 2014"
+output: html_document
+---
+#Programming Assignement - Weight Lifting Exercise Dataset
+
+In this assignement the task was to predict a weight lifting exercise class using
+data from accelerometers, attached on the body of 6 individuals. Each class
+represents a different type of exercise. We will divide the process in two phases
+
+1. Data preprocessing: Perform analysis on the columns of the original data and keep only the meaningful ones
+2. Model selection: Perform parameter analysis on various well known classifiers
+
+## 1.Data preprocessing
+Initialy we load the data using: 
+```{r, echo=TRUE}
+library(caret)
+dataOriginal<-read.csv("pml-training.csv")
+````
+
+A quick look in the dimensionality of the data frame reveals that we have 19622 observations
+with 160 columns.
+```{r, echo=TRUE}
+dim(dataOriginal)
+```
+
+We can discard the first 5 columns since they represent user data and timestamps
+```{r, echo=TRUE}
+head(dataOriginal[, (1:5)])
+dataOriginal<-dataOriginal[, -(1:5)]
+```
+
+Find near zero variance indices using caret's  *nearZeroVar* with the default values.
+```{r, echo=TRUE}
+indexNearZero <- nearZeroVar(dataOriginal)
+str(indexNearZero)
+data<-dataOriginal[, -indexNearZero]
+dim(data)
+```
+
+We have reduced the number of columns to `r dim(data)[2]`.
+
+
+## 2.Model selection
+
+
+
