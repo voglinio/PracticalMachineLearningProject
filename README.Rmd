@@ -121,7 +121,8 @@ load('classModel_RF_1.RData')
 plot(classModel_RF)
 ```
 
-The classification accuracy on the training set was:
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 15. The classification accuracy on the training set was:
 
 ```{r}
 p<-predict(classModel_RF, data[, -42])
