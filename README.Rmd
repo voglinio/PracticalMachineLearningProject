@@ -85,13 +85,45 @@ In this study we use SVM and Random Forest classifiers since it has been shown
 that they produce accurate models with good generalization properties.
 
 1. SVM classifier
+We used a radial basis kernel SVM trained with 4-cross validation and automatically generated 10 different
+parameters set (*tuneLength=10*). The input data were first preprocessed (center, scaled)  
 ```{r}
-#classModel_RF <-train(x=data[, -42], y=data[, 42], method="svmRadial", trControl = trainControl(method = "cv", number=4, allowParallel = TRUE))
+ppModel<-preProcess(data[, -42])
+preProcessedData<-predict(ppModel, data[, -42])
+#classModel_svm <-train(x=preProcessedData, y=data[, 42], method="svmRadial", trControl = trainControl(method = "cv", number=4, allowParallel = TRUE), tuneLength=10)
+```
+Tuning parameter 'sigma' was held constant at a value of 0.00879
+Accuracy was used to select the optimal model using  the largest value. The final values used for the model were sigma = 0.00879 and C = 128.
+
+```{r}
+load('classModel_svm.RData')
+plot(classModel_svm)
 ```
 
-2. Random forests
+The classification accuracy on the training set was:
+
 ```{r}
-#classModel_RF <-train(x=data[, -42], y=data[, 42], method="rf", trControl = trainControl(method = "cv", number=4, allowParallel = TRUE))
+p<-predict(classModel_svm, preProcessedData)
+confusionMatrix(p, data[, 42])
+````
 
+2. Random forests
+We trained random forest implementation using caret's train method and we tested 10 different parameters.
+Input data were not centered or scaled.
+```{r}
+#classModel_RF <-train(x=data[, -42], y=data[, 42], method="rf", trControl = trainControl(method = "cv", number=4, allowParallel = TRUE),  tuneLength=10)
+```
 
+The resulting model accuracy with respect to the parameters is 
 
+```{r}
+load('classModel_RF_1.RData')
+plot(classModel_RF)
+```
+
+The classification accuracy on the training set was:
+
+```{r}
+p<-predict(classModel_RF, data[, -42])
+confusionMatrix(p, data[, 42])
+```
